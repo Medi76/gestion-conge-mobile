@@ -1,28 +1,73 @@
 <template>
   <ion-page>
     <ion-header :translucent="true">
-      <ion-toolbar>
-        <ion-title>Blank</ion-title>
+      <ion-toolbar color="primary">
+        <ion-title>Liste des employées</ion-title>
+        <ion-icon :icon="person" size="large" slot="end"></ion-icon>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
-      </div>
+    <ion-content :fullscreen="true" class="ion-padding">
+      <ion-list>
+        <ion-item v-for="i in 10" :key="i">
+          <ion-avatar slot="start" ><img  src="../assets/blackmamba.jpg"></ion-avatar>
+          <ion-label>
+            <h2> employe num :{{i}}</h2>
+            <p>bonjour</p>
+          </ion-label>
+          <ion-button slot="end" color="primary" @click="add_conge=true">
+            <ion-icon :icon="add"></ion-icon>
+            congé
+          </ion-button>
+          <ion-item fill="outline">
+        <ion-label position="floating">Username</ion-label>
+        <ion-input type="text"></ion-input>
+       </ion-item>
+        </ion-item>
+      </ion-list>
     </ion-content>
+    <AddConge v-if="add_conge"></AddConge>
   </ion-page>
+ 
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+<script>
+import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar,IonIcon,IonList,
+  IonItem,IonAvatar,IonLabel,IonButton,modalController } from '@ionic/vue';
+import{person,add} from "ionicons/icons";
+import ModalView from '../components/ModalView.vue';
+import AddConge from '../components/AddConge.vue';
+export default{
+  components:{
+    IonContent, 
+    IonHeader, 
+    IonPage,
+     IonTitle,
+      IonToolbar,
+      IonIcon,IonAvatar,IonLabel,IonButton,
+      IonList,IonItem,modalController,AddConge,
+  },
+  data(){
+    return{
+      person,
+      add,
+      add_conge:false,
+    }
+  },
+    methods: {
+      async add_conge() {
+        const modal = await modalController.create({
+          component: Modal,
+        });
+        modal.present();
+
+        const { data, role } = await modal.onWillDismiss();
+        if (role === 'confirm') {
+          this.message = `Hello, ${data}!`;
+        }
+      }
+  }
+}
 </script>
 
 <style scoped>
